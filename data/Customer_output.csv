@@ -1,0 +1,6 @@
+mapping_address_id,cust_type,customer_name,st_no,st_no_suffix,st_dir_prefix,st_name,st_suffix,st_dir_suffix,addl_info_address,addl_info_name,primary_contact_email,primary_contact_phone,activation_date
+1001,R,BROWN|NICOLE||,Jan-68,,,NEWLINE,RD,,APT C 4A,,nicolekbbroswn@gmail.com|U|U|,43485133298||U|U|U|,00:00.0
+1002,R,SR|CAMPBELL|CHRISTINE & SCOTT||,952A,,,ROLLING,,S,OLD GREEN HOUSE,(DC'S MINI-MART),hbartonjr@verizon.net|U|U|,4346608928||U|U|U|,00:00.0
+1003,R,BROWN|ROBERT & CHARLOTTE||JR,12145,01-02-2024,S,CONSTITUTION,RTE,,OFFICE,,brown@gmail.com|U|U|,4346656394||U|U|U|,00:00.0
+1004,B,GRACE HILLS BAPTIST CHURCH ,1,,,ACRE ,LN,,,,3ab1ee@gmail.com|U|U|,4343520102||U|U|U|,00:00.0
+1005,R,MARTIN||GINA||,553,OLD,,COURTHOUSE,RD,,,(APARTMENT),vdromo1998@gmail.com|U|U|,4349076224||U|U|U|,00:00.0
