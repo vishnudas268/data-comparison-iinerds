@@ -44,24 +44,27 @@ def reformat_name(data):
     return formatted_names
 
 
-def process_customer_names(input_csv, output_csv):
+def process_customer_names(source_csv, output_csv):
     """
-    Process customer names based on cust_type and save the formatted output to another CSV file.
-    Also print expected vs actual results and status.
+    Process customer names based on `cust_type` in the output file.
+    Update the `customer_name` column in the output file and save the changes.
     """
-    # Read the input CSV
-    op_data = ps.read_csv(output_csv)
+    # Read the source CSV
+    source_df = ps.read_csv(source_csv)
+
+    # Now read the output file, which contains the `cust_type` column
+    output_df = ps.read_csv(output_csv)
 
     # Check if required columns exist
-    if "customer" not in op_data.columns or "cust_type" not in op_data.columns:
-        raise ValueError("The input file must contain 'customer' and 'cust_type' columns.")
+    if "customer" not in output_df.columns or "cust_type" not in output_df.columns:
+        raise ValueError("The output file must contain 'customer' and 'cust_type' columns.")
 
     # Initialize the customer_name column and comparison results
     customer_names = []
     comparison_results = []
 
-    for idx, row in op_data.iterrows():
-        cust_name = row["customer_name"]
+    for idx, row in output_df.iterrows():
+        cust_name = row["customer"]
         cust_type = row["cust_type"]
 
         # Determine the expected name based on cust_type
@@ -81,10 +84,10 @@ def process_customer_names(input_csv, output_csv):
         comparison_results.append((expected_name, actual_name, status))
 
     # Add the new column to the DataFrame
-    op_data["customer_name"] = customer_names
+    output_df["customer_name"] = customer_names
 
-    # Save the updated DataFrame to the output CSV
-    # df.to_csv(output_csv, index=False)
+    # Save the updated DataFrame back to the output CSV
+    output_df.to_csv(output_csv, index=False)
 
     # Print the comparison results to the console
     print("\nComparison Results:")
@@ -96,5 +99,5 @@ def process_customer_names(input_csv, output_csv):
     return customer_names
 
 
-process_customer_names(source_data,output_data)
+process_customer_names(source_data, output_data)
 
