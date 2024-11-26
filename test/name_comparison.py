@@ -10,86 +10,70 @@ output_data = ps.read_csv(os.getenv('OUTPUT_FILE_PATH'))
 VALID_SUFFIXES = {"II", "III", "IV", "V", "JR", "SR"}
 
 
-def reformat_name(data):
-    name_list = data["customer"].tolist()
+def reformat_name(source):
+    name_list = source["customer"].tolist()
     formatted_names = []
     for cust in name_list:
-        # Replace "and" with "&"
         cust = cust.replace(" and ", " & ")
 
-        # Split the customer string into parts
         parts = cust.split()
 
-        # Check if the last part is a valid suffix
         if parts[-1].upper() in VALID_SUFFIXES:
-            suffix = parts.pop()  # Extract suffix
+            suffix = parts.pop()
         else:
-            suffix = ""  # No suffix
+            suffix = ""
 
-        # Handle different name formats
-        if len(parts) >= 2:  # At least First Name and Last Name are expected
-            last = parts.pop()  # Last part becomes Last Name
-            first = " ".join(parts)  # Remaining parts become First Name
-            middle = ""  # No middle name in this case
-        elif len(parts) == 1:  # Only First Name provided
+        if len(parts) >= 2:
+            last = parts.pop()
+            first = " ".join(parts)
+            middle = ""
+        elif len(parts) == 1:
             first = parts[0]
             last = middle = ""
-        else:  # Invalid or empty name
-            formatted_names.append("|||")  # Placeholder for invalid input
+        else:
+            formatted_names.append("|||")
             continue
 
-        # Combine the components ensuring placeholders for missing parts
         formatted_name = f"{last}|{first}|{middle}|{suffix}"
         formatted_names.append(formatted_name)
+    print(formatted_names)
     return formatted_names
 
 
-def process_customer_names(source_csv, output_csv):
-    """
-    Process customer names based on `cust_type` in the output file.
-    Update the `customer_name` column in the output file and save the changes.
-    """
-    # Read the source CSV
-    source_df = ps.read_csv(source_csv)
+reformat_name(source_data)
 
-    # Now read the output file, which contains the `cust_type` column
-    output_df = ps.read_csv(output_csv)
 
-    # Check if required columns exist
-    if "customer" not in output_df.columns or "cust_type" not in output_df.columns:
-        raise ValueError("The output file must contain 'customer' and 'cust_type' columns.")
+'''
+def process_customer_names(output_csv):
 
-    # Initialize the customer_name column and comparison results
     customer_names = []
     comparison_results = []
 
-    for idx, row in output_df.iterrows():
-        cust_name = row["customer"]
+    for idx, row in output_csv.iterrows():
         cust_type = row["cust_type"]
 
-        # Determine the expected name based on cust_type
-        if cust_type == "R":  # Convert name if cust_type is "R"
-            expected_name = reformat_name([cust_name])[0]
-        elif cust_type == "B":  # Retain original name if cust_type is "B"
-            expected_name = cust_name
-        else:  # Invalid cust_type
+        
+        if cust_type == "R":
+            expected_name = reformat_name(source_data)
+        elif cust_type == "B":  
+            expected_name = source_csv["customer"]
+        else: 
             expected_name = "|||"
 
-        # For simplicity, use expected_name as the actual name for now
+        
         actual_name = expected_name
         customer_names.append(actual_name)
 
-        # Compare expected and actual names
+        
         status = "Pass" if actual_name == expected_name else "Fail"
         comparison_results.append((expected_name, actual_name, status))
 
-    # Add the new column to the DataFrame
-    output_df["customer_name"] = customer_names
+   
+    output_csv["customer_name"] = customer_names
 
-    # Save the updated DataFrame back to the output CSV
-    output_df.to_csv(output_csv, index=False)
+    
+    output_csv.to_csv(output_csv, index=False)
 
-    # Print the comparison results to the console
     print("\nComparison Results:")
     print(f"{'Expected Name':<40} {'Actual Name':<40} {'Status':<10}")
     print("=" * 90)
@@ -100,4 +84,5 @@ def process_customer_names(source_csv, output_csv):
 
 
 process_customer_names(source_data, output_data)
+'''
 
