@@ -36,53 +36,26 @@ def reformat_name(source):
 
         formatted_name = f"{last}|{first}|{middle}|{suffix}"
         formatted_names.append(formatted_name)
-    print(formatted_names)
     return formatted_names
 
 
-reformat_name(source_data)
-
-
-'''
-def process_customer_names(output_csv):
-
-    customer_names = []
-    comparison_results = []
-
-    for idx, row in output_csv.iterrows():
+def checking_output_data(source, output):
+    formatted_names_list = reformat_name(source)
+    list_names = [s.upper() for s in formatted_names_list]
+    source["customer_upper"] = source["customer"].str.upper()
+    for _, row in output.iterrows():
         cust_type = row["cust_type"]
-
-        
+        customer_name = row["customer_name"]
         if cust_type == "R":
-            expected_name = reformat_name(source_data)
-        elif cust_type == "B":  
-            expected_name = source_csv["customer"]
-        else: 
-            expected_name = "|||"
-
-        
-        actual_name = expected_name
-        customer_names.append(actual_name)
-
-        
-        status = "Pass" if actual_name == expected_name else "Fail"
-        comparison_results.append((expected_name, actual_name, status))
-
-   
-    output_csv["customer_name"] = customer_names
-
-    
-    output_csv.to_csv(output_csv, index=False)
-
-    print("\nComparison Results:")
-    print(f"{'Expected Name':<40} {'Actual Name':<40} {'Status':<10}")
-    print("=" * 90)
-    for expected, actual, status in comparison_results:
-        print(f"{expected:<40} {actual:<40} {status:<10}")
-
-    return customer_names
+            if customer_name in list_names:
+                print(f"{customer_name} is converted correctly")
+            else:
+                print(f"{customer_name} is not converted correctly")
+        else:
+            if customer_name in source["customer_upper"].values:
+                print(f"{customer_name} is converted correctly")
+            else:
+                print(f"{customer_name} is not converted correctly")
 
 
-process_customer_names(source_data, output_data)
-'''
-
+checking_output_data(source_data, output_data)
